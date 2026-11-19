@@ -1,6 +1,6 @@
 <h1>ExpNo 5 : Implement Minimax Search Algorithm for a Simple TIC-TAC-TOE game</h1> 
-<h3>Name:           </h3>
-<h3>Register Number/Staff Id:          </h3>
+<h3>Name:  SANJAYKUMAR B         </h3>
+<h3>Register Number:    212224230242      </h3>
 <H3>Aim:</H3>
 <p>
     Implement Minimax Search Algorithm for a Simple TIC-TAC-TOE game
@@ -103,6 +103,161 @@ def minimax(game)
 end
 
 <hr>
+
+## program
+```
+import math
+
+# Function to display the board
+def print_board(board):
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 9)
+
+
+# Check winner
+def check_winner(board):
+    # Rows
+    for row in board:
+        if row[0] == row[1] == row[2] and row[0] != " ":
+            return row[0]
+
+    # Columns
+    for col in range(3):
+        if board[0][col] == board[1][col] == board[2][col] and board[0][col] != " ":
+            return board[0][col]
+
+    # Diagonals
+    if board[0][0] == board[1][1] == board[2][2] and board[0][0] != " ":
+        return board[0][0]
+
+    if board[0][2] == board[1][1] == board[2][0] and board[0][2] != " ":
+        return board[0][2]
+
+    return None
+
+
+# Check if board is full
+def is_full(board):
+    for row in board:
+        if " " in row:
+            return False
+    return True
+
+
+# Minimax Algorithm
+def minimax(board, depth, is_max):
+    winner = check_winner(board)
+
+    if winner == "O":
+        return 10 - depth
+
+    if winner == "X":
+        return depth - 10
+
+    if is_full(board):
+        return 0
+
+    if is_max:
+        best = -math.inf
+
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == " ":
+                    board[i][j] = "O"
+                    score = minimax(board, depth + 1, False)
+                    board[i][j] = " "
+                    best = max(best, score)
+
+        return best
+
+    else:
+        best = math.inf
+
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == " ":
+                    board[i][j] = "X"
+                    score = minimax(board, depth + 1, True)
+                    board[i][j] = " "
+                    best = min(best, score)
+
+        return best
+
+
+# Find best move for AI
+def best_move(board):
+    best_score = -math.inf
+    move = (-1, -1)
+
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == " ":
+                board[i][j] = "O"
+                score = minimax(board, 0, False)
+                board[i][j] = " "
+
+                if score > best_score:
+                    best_score = score
+                    move = (i, j)
+
+    return move
+
+
+# Main Program
+board = [
+    [" ", " ", " "],
+    [" ", " ", " "],
+    [" ", " ", " "]
+]
+
+print("=== TIC TAC TOE ===")
+print("You are X")
+print("Computer is O")
+
+while True:
+
+    print_board(board)
+
+    # Human Move
+    while True:
+        row = int(input("Enter row (0-2): "))
+        col = int(input("Enter column (0-2): "))
+
+        if board[row][col] == " ":
+            board[row][col] = "X"
+            break
+        else:
+            print("Invalid move! Try again.")
+
+    if check_winner(board) == "X":
+        print_board(board)
+        print("You Win!")
+        break
+
+    if is_full(board):
+        print_board(board)
+        print("Match Draw!")
+        break
+
+    # Computer Move
+    r, c = best_move(board)
+    board[r][c] = "O"
+
+    print("\nComputer played at:", r, c)
+
+    if check_winner(board) == "O":
+        print_board(board)
+        print("Computer Wins!")
+        break
+
+    if is_full(board):
+        print_board(board)
+        print("Match Draw!")
+        break
+
+```
+
 <h2>Sample Input and Output</h2>
 
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/6b668685-8bcc-43c5-b5c2-ddd43f3da84a)
@@ -110,6 +265,8 @@ end
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/dc06427a-d4ce-43a1-95bd-9acfaefac323)
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/a8a27e2a-6fd4-46a2-afb5-6d27b8556702)
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/a2acb6a1-ed8e-42e5-8968-fe805e4b0255)
+
+<img width="920" height="627" alt="image" src="https://github.com/user-attachments/assets/0b97fa07-fa13-4fbf-b6e7-b960b63e5cef" />
 
 <hr>
 <h2>Result:</h2>
